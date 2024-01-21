@@ -34,6 +34,7 @@ To deploy this project
 ## Authors
 
 - [@slrealtech](https://www.github.com/slrealtech)
+- [@MrNima](https://www.github.com/darkmakerofc)
 - [@elisacoders](https://www.elisacoders.org.lk)
 
 
