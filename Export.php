@@ -4,15 +4,13 @@ $username = "root";
 $password = "";
 $dbname = "mycontacts";
 
-// Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
+//Connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-
-// Handle delete operation
+//Delete
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete"])) {
     $contactId = mysqli_real_escape_string($conn, $_POST["delete"]);
     $sqlDelete = "DELETE FROM contacts WHERE id = '$contactId'";
@@ -24,13 +22,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete"])) {
     }
 }
 
-// Export contacts as VCard
+// Export VCard
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["export"])) {
     // Retrieve all contacts
     $sqlSelect = "SELECT * FROM contacts";
     $result = $conn->query($sqlSelect);
 
-    // Generate vCard content
+    // Generate vCard
     $vcardContent = "";
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
@@ -43,19 +41,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["export"])) {
         }
     }
 
-    // Set the HTTP headers for vCard download
     header('Content-Type: text/vcard');
     header('Content-Disposition: attachment; filename="contacts.vcf"');
 
-    // Output vCard content
     echo $vcardContent;
 
-    // Close the database connection and stop further execution
+    // Close database
     $conn->close();
     exit();
 }
 
-// Retrieve all contacts
 $sqlSelect = "SELECT * FROM contacts";
 $result = $conn->query($sqlSelect);
 ?>
@@ -79,10 +74,9 @@ $result = $conn->query($sqlSelect);
             height: 100vh;
         }
 
-        /* Container for the table to enable scrolling */
         .table-container {
             overflow: auto;
-            max-height: 400px; /* Adjust the max height as needed */
+            max-height: 400px;
         }
 
         table {
@@ -149,9 +143,8 @@ $result = $conn->query($sqlSelect);
             margin-top: 20px;
         }
 
-        /* Additional styling for sticky header */
         thead th {
-            position: -webkit-sticky; /* For Safari */
+            position: -webkit-sticky;
             position: sticky;
             top: 0;
             background-color: #4caf50;
@@ -160,8 +153,6 @@ $result = $conn->query($sqlSelect);
     </style>
 </head>
 <body>
-
-<!-- Container for the table to enable scrolling -->
 <div class="table-container">
 
     <table>
@@ -205,6 +196,6 @@ $result = $conn->query($sqlSelect);
 </html>
 
 <?php
-// Close the database connection
+// Close
 $conn->close();
 ?>
