@@ -4,10 +4,9 @@ $username = "root";
 $password = "";
 $dbname = "mycontacts";
 
-// Create connection
+// connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
@@ -29,24 +28,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Import contacts from VCF file
         $vcfFile = $_FILES["vcf_file"];
 
-        // Check if the file is a valid VCF file
         $fileType = pathinfo($vcfFile["name"], PATHINFO_EXTENSION);
         if ($fileType != "vcf") {
             echo "<p class='error-message'>Invalid file format. Please upload a VCF file.</p>";
             exit();
         }
 
-        // Read the VCF file content
+
         $vcfContent = file_get_contents($vcfFile["tmp_name"]);
 
-        // Extract FN: and TEL: values from VCF content
         preg_match_all('/FN:(.*?)(?=\r\n|\n|\r|END:VCARD)/s', $vcfContent, $nameMatches);
         preg_match_all('/TEL:(.*?)(?=\r\n|\n|\r|END:VCARD)/s', $vcfContent, $numberMatches);
 
         $names = $nameMatches[1];
         $numbers = $numberMatches[1];
 
-        // Insert values into the database
         for ($i = 0; $i < count($names) && $i < count($numbers); $i++) {
             $name = mysqli_real_escape_string($conn, $names[$i]);
             $number = mysqli_real_escape_string($conn, $numbers[$i]);
